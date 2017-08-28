@@ -24,55 +24,82 @@ class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
         map<char, int> charData;
-        for (char c : s1){
-            charData[c]++;
-        }
+        for (char c : s1){charData[c]++;}
  
-        map<char, int> *tmp = nullptr;
-        int target = s1.size(), cur = 0;
+        int wstart = -1;
+        int win_len = 0;
         for (int i = 0; i < s2.size(); i++){
-            char c = s2[i];
+            if (charData[s2[i]] > 0){
+                if (wstart == -1)
+                    wstart = i;
+                charData[s2[i]]--;
+                win_len++;
  
-            if (charData[c] != 0){
-                if (tmp == nullptr)
-                    tmp = new map<char, int>(charData);
-                if (tmp->at(c) > 0){
-                    tmp->at(c)--;
- 
-                    if (++cur == target){
-                        return true;
-                    }
-                }
-                else{
-                    //go back;
-                    int rewindCount = charData[c];
- 
-                    while (rewindCount > 0){
-                        if (s2[--i] == c){
-                            rewindCount--;
-                        }
-                    }
- 
-                    delete tmp;
-                    tmp = new map<char, int>(charData);
-                    cur = 0;
-                }
- 
+                if (win_len == s1.size())
+                    return true;
             }
-            else{
-                if (tmp != nullptr){
-                    delete tmp;
-                    tmp = nullptr;
+            else if (wstart != -1){
+                //we are inside sliding window
+                bool waiting = true;
+                while (wstart != i && waiting){
+                    charData[s2[wstart]]++;
+                    wstart++;
+                    win_len--;
+ 
+                    //re-evaluate
+                    if (charData[s2[i]] > 0){
+                        charData[s2[i]]--;
+                        waiting = false;
+                        win_len++;
+                    }
                 }
-                cur = 0;
+ 
+                if (waiting == true){
+                    //move outside of sliding window
+                    wstart = -1;
+                }
             }
         }
  
-        if (tmp != nullptr){
-            delete tmp;
-            tmp = nullptr;
+        return false;
+    }
+};
+
+// ========= V2 =======
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        int bucket1[26] = {}, bucket2[26] = {};
+        if (s2.size() < s1.size())
+            return false;
+
+        for (char c : s1){bucket1[c - 'a']++;}
+        for (int i = 0; i < s1.size(); i++){bucket2[s2[i] - 'a']++;}
+
+        int left_pos = 0, right_pos = s1.size() - 1;
+        while (right_pos < s2.size()){
+            bool bmatch = true;
+            for (int i = 0; i < 26; i++){
+                if (bucket1[i] != bucket2[i]){
+                    bmatch = false;
+                    break;
+                }
+            }
+            if (bmatch) return true;
+
+            bucket2[s2[left_pos] - 'a']--;
+            left_pos++;
+            right_pos++;
+            if (right_pos < s2.size()){
+                bucket2[s2[right_pos] - 'a']++;
+            }
         }
- 
+
         return false;
     }
 };
