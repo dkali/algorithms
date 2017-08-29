@@ -37,7 +37,7 @@ public:
         }
 
         ListNode *root = nullptr, *current = nullptr;
-        while(!q.empty()){
+        while (!q.empty()){
             ListNode *n = q.top();
             q.pop();
 
