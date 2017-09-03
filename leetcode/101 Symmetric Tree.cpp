@@ -19,7 +19,7 @@
 // Bonus points if you could solve it both recursively and iteratively.
 
 #include <iostream>
-#include <queue>
+#include <deque>
 
 using namespace std;
 
@@ -31,53 +31,35 @@ struct TreeNode {
     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
+
 class Solution {
-private:
-    bool check_nodes(TreeNode *ln, TreeNode *rn){
-        int llv = INT_MAX, lrv = INT_MAX, rlv = INT_MAX, rrv = INT_MAX;
-        if (ln->left != nullptr) {llv = ln->left->val;}
-        if (ln->right != nullptr) {lrv = ln->right->val;}
-        if (rn->left != nullptr) {rlv = rn->left->val;}
-        if (rn->right != nullptr) {rrv = rn->right->val;}
-
-        if (llv != rrv) return false;
-        if (lrv != rlv) return false;
-        return true;
-    }
-
 public:
     bool isSymmetric(TreeNode* root) {
-        queue<TreeNode*> lq, rq;
-        if (root == nullptr) return true;
-        if (root->left == nullptr && root->right == nullptr) return true;
-        if ((root->left == nullptr && root->right != nullptr) ||
-            (root->right == nullptr && root->left != nullptr)) return false;
-        if (root->left->val != root->right->val) return false;
+        if (!root) return true;
+        deque<TreeNode*> dq;
+        dq.push_front(root->left);
+        dq.push_back(root->right);
 
-        lq.push(root->left);
-        rq.push(root->right);
-
-        while (!lq.empty() && !rq.empty()){
-            int limit = lq.size();
-
-            for (int i = 0; i < limit; i++){
-                TreeNode *ln, *rn;
-                ln = lq.front();
-                rn = rq.front();
-                lq.pop();
-                rq.pop();
-
-                if (ln->val != rn->val) return false;
-                if (check_nodes(ln, rn) == false) return false;
-                if (ln->left != nullptr) lq.push(ln->left);
-                if (ln->right != nullptr) lq.push(ln->right);
-                if (rn->right != nullptr) rq.push(rn->right);
-                if (rn->left != nullptr) rq.push(rn->left);
+        while (!dq.empty()) {
+            if (dq.front() == nullptr && dq.back() == nullptr) {
+                dq.pop_front();
+                dq.pop_back();
+                continue;
             }
-        }
+            TreeNode *left, *right;
+            left = dq.front();
+            right = dq.back();
 
-        if (!lq.empty() || !rq.empty())
-            return false;
+            dq.pop_front();
+            dq.pop_back();
+            if ((!left && right) || (left && !right) || (left->val != right->val)) {
+                return false;
+            }
+            dq.push_front(left->right);
+            dq.push_front(left->left);
+            dq.push_back(right->left);
+            dq.push_back(right->right);
+        }
         return true;
     }
 };
