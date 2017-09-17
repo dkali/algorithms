@@ -30,25 +30,14 @@
 
 #include <iostream>
 #include <vector>
-#include <stack>
 
 using namespace std;
 
 class Solution {
-private:
-    void add_digit(stack<int> &st, int digit){
-        int prev = 0;
-        if (!st.empty()){
-            prev = st.top();
-            st.pop();
-        }
-        st.push(prev + digit);
-    }
-
 public:
     string solveEquation(string equation) {
-        stack<int> dst;
-        stack<int> xst;
+        int dval = 0;
+        int xval = 0;
 
         int sign = 1;
         int op = 1;
@@ -61,12 +50,12 @@ public:
             else if (c == 'x'){
                 if (digit == "")
                     digit = "1";
-                add_digit(xst, stoi(digit.c_str(), 0, 10) * sign * op);
+                xval += stoi(digit.c_str(), 0, 10) * sign * op;
                 digit = "";
             }
             else if (c != '='){
                 if (digit != ""){
-                    add_digit(dst, stoi(digit.c_str(), 0, 10) * sign * op);
+                    dval += stoi(digit.c_str(), 0, 10) * sign * op;
                     digit = "";
                 }
                 if (c == '-')
@@ -76,7 +65,7 @@ public:
             }
             else if (c == '='){
                 if (digit != ""){
-                    add_digit(dst, stoi(digit.c_str(), 0, 10) * sign * op);
+                    dval += stoi(digit.c_str(), 0, 10) * sign * op;
                     digit = "";
                 }
                 sign = -1;
@@ -84,14 +73,9 @@ public:
             }
         }
         if (equation[equation.size()-1] != 'x')
-            add_digit(dst, stoi(digit.c_str(), 0, 10) * sign * op);
+            dval += stoi(digit.c_str(), 0, 10) * sign * op;
 
         //form results
-        int xval = 0, dval = 0;
-        if (!xst.empty())
-            xval = xst.top();
-        if (!dst.empty())
-            dval = dst.top();
         if (xval == 0 && dval != 0)
             return "No solution";
         else if (xval == 0 && dval == 0)
