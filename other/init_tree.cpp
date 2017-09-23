@@ -12,6 +12,13 @@ struct TreeLinkNode {
     TreeLinkNode(int x) : val(x), left(nullptr), right(nullptr), next(nullptr) {}
 };
 
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
 class Solution {
 public:
     /////////// utility
@@ -52,12 +59,58 @@ public:
 
         return root;
     }
+
+////////////////////////////////////////
+    // Decodes your encoded data to tree.
+    template<class T>
+    T* deserialize(string data) {
+        T *root = nullptr;
+        int start_pos = 0;
+        queue<T*> q;
+
+        string d = get_digit(data, start_pos);
+        if (d == "#")
+            return root;
+        root = new T(stoi(d));
+        q.push(root);
+
+        while (start_pos < data.size()){
+            T *n = q.front();
+            q.pop();
+            string ln = get_digit(data, start_pos);
+            string rn = get_digit(data, start_pos);
+            if (ln != "#"){
+                n->left = new T(stoi(ln));
+                q.push(n->left);
+            }
+            if (rn != "#"){
+                n->right = new T(stoi(rn));
+                q.push(n->right);
+            }
+        }
+
+        return root;
+    }
+
+    string get_digit(string &data, int &start_pos){
+        string digit = "";
+        for (; start_pos < data.size(); start_pos++){
+            if (data[start_pos] != ',')
+                digit += data[start_pos];
+            else
+                break;
+        }
+        start_pos++;
+        return digit;
+    }
 };
 
 int main() {
     Solution sol;
     vector<string> inputV = {"0", "1", "2", "3", "4", "5", "6"};
     TreeLinkNode *r = sol.initTree<TreeLinkNode>(inputV);
-    sol.connect(r);
+
+    string str = "1,2,3,#,#,4,5,#,#,#,#";
+    sol.deserialize<TreeNode>(s);
     return 0;
 }
