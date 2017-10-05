@@ -16,14 +16,14 @@ public:
         int n = grid[0].size();
         int *helper = new int[n];
 
-        helper[0] = grid[0][0];
-        for (int line = 1; line < n; line++) {
-            helper[line] = grid[0][line] + helper[line - 1];
-        }
-
-        for (int row = 1; row < m; row++){
-            for (int col = 0; col < n; col++){
-                helper[col] = grid[row][col] + (col - 1 >= 0 ? min(helper[col - 1], helper[col]) : helper[col]);
+        helper[0] = 0;
+        for (int row = 0; row < m; row++){
+            helper[0] += grid[row][0];
+            for (int col = 1; col < n; col++){
+                if (row == 0)
+                    helper[col] = grid[row][col] + helper[col - 1];
+                else
+                    helper[col] = grid[row][col] + min(helper[col - 1], helper[col]);
             }
         }
 
