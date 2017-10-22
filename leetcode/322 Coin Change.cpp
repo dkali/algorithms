@@ -15,86 +15,46 @@
 
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
 class Solution {
 private:
-    void add_coin(int coin_index, vector<int> &coins, int &summ){
-        summ += coins[coin_index];
-        count->at(coin_index)++;
-    }
-
-    bool extract_coin(int coin_index, vector<int> &coins, int &summ) {
-        if (count->at(coin_index) > 0){
-            count->at(coin_index)--;
-            summ -= coins[coin_index];
-            return true;
+    void print_dp(int *dp, int coin_val, int amount){
+        printf("coin %d:", coin_val);
+        for (int i = 0; i <= amount; i++){
+            printf("\t%d", dp[i]);
         }
-        return false;
+        printf("\n");
     }
-
-    bool extract_prev_coin(int coin_index, vector<int> &coins, int &summ) {
-        coin_index++;
-        while (coin_index < coins.size()){
-            if (count->at(coin_index) > 0){
-                count->at(coin_index)--;
-                summ -= coins[coin_index];
-                return true;
-            }
-            else
-                coin_index++;
-        }
-        return false;
-    }
-
+    
 public:
-    vector<int> *count;
-
-    Solution(){
-        count = new vector<int>;
-    }
-    ~Solution(){
-        delete count;
-    }
-
     int coinChange(vector<int>& coins, int amount) {
         sort(coins.begin(), coins.end());
-        int index = coins.size() - 1;
-        int summ = 0;
-
-        for (int i = 0; i < coins.size(); i++){
-            count->push_back(0);
-        }
-
-        while (summ != amount){
-            if (summ < amount){
-                add_coin(index, coins, summ);
+        
+        if (amount == 0)
+            return 0;
+        if (amount < coins[0])
+            return -1;
+        
+        int *dp = new int[amount + 1];
+        for (int i = 0; i <= amount; i++) {dp[i] = 0;}
+        
+        for (int coin_val : coins){
+            if (coin_val > amount)
+                break;
+            
+            dp[coin_val] = 1;
+            for (int target = coin_val + 1; target <= amount; target++){
+                if (dp[target - coin_val] != 0)
+                    if (dp[target] == 0 || (dp[target] > dp[target - coin_val] + 1))
+                        dp[target] = dp[target - coin_val] + 1;
             }
-            else {
-                if (false == extract_coin(index, coins, summ))
-                    return -1;
-                if (index == 0){
-                    if (false == extract_prev_coin(index, coins, summ))
-                        return -1; // no combinations available
-                }
-                if (index > 0)
-                    index--;
-            }
+            //print_dp(dp, coin_val, amount);
         }
-
-        int cnt = 0;
-        for (int i : *count){cnt += i;};
-        return cnt;
+        
+        int result = dp[amount] == 0 ? -1 : dp[amount];
+        delete[] dp;
+        return result;
     }
 };
-
-int main(){
-    Solution sol;
-    vector<int> v = {186,419,83,408};
-    int target = 6249; //20
-    cout << sol.coinChange(v, target) << endl;
-
-    return 0;
-}
