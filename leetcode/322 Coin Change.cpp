@@ -19,21 +19,11 @@
 using namespace std;
 
 class Solution {
-private:
-    void print_dp(int *dp, int coin_val, int amount){
-        printf("coin %d:", coin_val);
-        for (int i = 0; i <= amount; i++){
-            printf("\t%d", dp[i]);
-        }
-        printf("\n");
-    }
-    
 public:
     int coinChange(vector<int>& coins, int amount) {
-        sort(coins.begin(), coins.end());
-        
         if (amount == 0)
             return 0;
+        sort(coins.begin(), coins.end());
         if (amount < coins[0])
             return -1;
         
@@ -50,7 +40,6 @@ public:
                     if (dp[target] == 0 || (dp[target] > dp[target - coin_val] + 1))
                         dp[target] = dp[target - coin_val] + 1;
             }
-            //print_dp(dp, coin_val, amount);
         }
         
         int result = dp[amount] == 0 ? -1 : dp[amount];
