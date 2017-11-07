@@ -17,12 +17,11 @@ public:
         long left = 0, right = height.size() - 1;
         
         while (left < right){
-            long d = (right - left) * min(height[left], height[right]);
-            max_area = fmax(max_area, d);
-            if (height[left] < height[right])
-                left++;
-            else
-                right--;
+            long h = min(height[left], height[right]);
+            long water = (right - left) * h;
+            max_area = fmax(max_area, water);
+            while (height[left] <= h && left < right) left++;
+            while (height[right] <= h && left < right) right--;
         }
         return max_area;
     }
