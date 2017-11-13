@@ -42,10 +42,7 @@ public:
     
     /** @return whether we have a next smallest number */
     bool hasNext() {
-        if (current || !st->empty())
-            return true;
-        else
-            return false;
+        return (current || !st->empty()) ? true : false;
     }
     
     /** @return the next smallest number */
