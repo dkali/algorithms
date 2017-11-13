@@ -7,7 +7,7 @@
 // Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
 
 #include <iostream>
-#include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -21,32 +21,39 @@ struct TreeNode {
 
 class BSTIterator {
 private:
-    queue<int> st;
-
-    void dfs(TreeNode *n){
-        if (!n) return;
-
-        dfs(n->left);
-        st.push(n->val);
-        dfs(n->right);
-    }
-
+    stack<TreeNode*> *st;
+    TreeNode *current;
+    
 public:
     BSTIterator(TreeNode *root) {
-        if (root)
-            dfs(root);
+        st = new stack<TreeNode*>();
+        current = root;
     }
-
+    
+    ~BSTIterator(){
+        delete st;
+    }
+    
     /** @return whether we have a next smallest number */
     bool hasNext() {
-        return !st.empty();
+        if (current || !st->empty())
+            return true;
+        else
+            return false;
     }
-
+    
     /** @return the next smallest number */
     int next() {
-        int val = st.front();
-        st.pop();
-        return val;
+        while (current){
+            st->push(current);
+            current = current->left;
+        }
+        
+        TreeNode *tmp = st->top();
+        st->pop();
+        current = tmp->right;
+        
+        return tmp->val;
     }
 };
 
