@@ -6,6 +6,12 @@
 
 // Note: next() and hasNext() should run in average O(1) time and uses O(h) memory, where h is the height of the tree.
 
+/**
+ * Your BSTIterator will be called like this:
+ * BSTIterator i = BSTIterator(root);
+ * while (i.hasNext()) cout << i.next();
+ */
+
 #include <iostream>
 #include <stack>
 
@@ -56,9 +62,3 @@ public:
         return tmp->val;
     }
 };
-
-/**
- * Your BSTIterator will be called like this:
- * BSTIterator i = BSTIterator(root);
- * while (i.hasNext()) cout << i.next();
- */
