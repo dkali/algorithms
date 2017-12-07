@@ -46,9 +46,8 @@ public:
     
     string reconstruct_brackets(string str){
         long count = pairs_num * 2 - str.size();
-        string tail = "";
         if (count > 0){
-            tail = string(count, ')');
+            string tail = string(count, ')');
             str += tail;
         }
         return str;
