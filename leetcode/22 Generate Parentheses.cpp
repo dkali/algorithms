@@ -32,14 +32,11 @@ public:
             v.push_back(reconstruct_brackets(str));
         }
         else{
-            str += '(';
-            bt(str, v, limit - 1);
-            str.pop_back();
+            bt(str + '(', v, limit - 1);
             long brackets_opened = (pairs_num - limit);
             long brackets_closed = str.size() - brackets_opened;
             if (str != "" && (brackets_opened > brackets_closed)){
-                str += ')';
-                bt(str, v, limit);
+                bt(str + ')', v, limit);
             }
         }
     }
