@@ -8,6 +8,52 @@
 
 // Your algorithm should run in O(n) complexity.
 
+
+#include <iostream>
+#include <vector>
+#include <unordered_set>
+
+using namespace std;
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> bucket;
+        int max_len = 0, cur_len = 0;
+        
+        for (int num : nums)
+            bucket.insert(num);
+        
+        for (int num : nums) {
+            if (bucket.find(num) == bucket.end())
+                continue;
+            
+            bucket.erase(num);
+            cur_len++;
+            int tmp_val = num;
+            while (bucket.find(tmp_val - 1) != bucket.end()) {
+                cur_len++;
+                bucket.erase(tmp_val - 1);
+                tmp_val--;
+            }
+            tmp_val = num;
+            while (bucket.find(tmp_val + 1) != bucket.end()) {
+                cur_len++;
+                bucket.erase(tmp_val + 1);
+                tmp_val++;
+            }
+            
+            if (cur_len > max_len)
+                max_len = cur_len;
+            cur_len = 0;
+        }
+        
+        return max_len;
+    }
+};
+
+// ====================================
+
 #include <iostream>
 #include <vector>
 #include <map>
