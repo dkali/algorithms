@@ -39,9 +39,8 @@ public:
                 k--;
             }
             
-            if (c != '0' || myStack.size() != 0) {
+            if (c != '0' || myStack.size() != 0)
                 myStack.push(c);
-            }
         }
         
         while (k-- > 0)
