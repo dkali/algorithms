@@ -64,6 +64,7 @@ public:
             k--;
         }
         
+        //reconstruct string from stack
         string ret = "";
         ret.resize(bucket.size(), '-');
         long pos = bucket.size() - 1;
