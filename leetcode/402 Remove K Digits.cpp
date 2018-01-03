@@ -29,45 +29,30 @@ using namespace std;
 class Solution {
 public:
     string removeKdigits(string num, int k) {
-        if (k >= num.size())
+        if (k >= num.size() || num.size() == 0)
             return "0";
         
-        stack<char> bucket;
-        char last = '#';
-        
+        stack<char> myStack;
         for (char c : num){
-            if (last == '#'){
-                if (c != '0') {
-                    bucket.push(c);
-                    last = c;
-                }
-                continue;
-            }
-            
-            while (last > c && k > 0) {
-                bucket.pop();
+            while (!myStack.empty() && myStack.top() > c && k > 0) {
+                myStack.pop();
                 k--;
-                if (bucket.size() == 0)
-                    last = '#';
-                else
-                    last = bucket.top();
             }
             
-            if (c != '0' || bucket.size() != 0) {
-                bucket.push(c);
-                last = c;
+            if (c != '0' || myStack.size() != 0) {
+                myStack.push(c);
             }
         }
         
         while (k-- > 0)
-            bucket.pop();
+            myStack.pop();
         
         //reconstruct string from stack
         string ret = "";
-        ret.resize(bucket.size(), '-');
-        while (!bucket.empty()) {
-            ret[bucket.size() - 1] = bucket.top();
-            bucket.pop();
+        ret.resize(myStack.size(), '-');
+        while (!myStack.empty()) {
+            ret[myStack.size() - 1] = myStack.top();
+            myStack.pop();
         }
         
         return ret == "" ? "0" : ret;
