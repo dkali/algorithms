@@ -11,7 +11,6 @@
 
 
 // ============ reworked, 10 ms ===========
-
 #include <iostream>
 #include <vector>
 
@@ -47,6 +46,41 @@ public:
     }
 };
 
+
+// ============ reworked, 13 ms ===========
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        long firstLength = num1.size();
+        long secondLength = num2.size();
+        long resultLength = firstLength + secondLength;
+        vector<char> result (resultLength, NULL);
+        long multiply = 0, cursor = 0;
+        for (long s = secondLength - 1; s >= 0; s--) {
+            for (long f = firstLength - 1; f >= 0; f--) {
+                multiply = (num2[s] - '0') * (num1[f] - '0');
+                cursor = s + f + 1;
+                multiply += result[cursor];
+                result[cursor - 1] += multiply / 10;
+                result[cursor] = multiply % 10;
+            }
+        }
+        
+        cursor = 0;
+        if (result[0] == 0) {
+            if (result[1] == 0) return "0";
+            cursor = 1;
+        }
+        for (int i = 0; i < resultLength; i++) result[i] += '0';
+        string ret (result.begin() + cursor, result.end());
+        return ret;
+    }
+};
 
 // ============ first try, 25 ms ===========
 
