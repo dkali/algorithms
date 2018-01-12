@@ -21,28 +21,23 @@ using namespace std;
 class Solution {
 public:
     int minimumTotal(vector<vector<int>>& triangle) {
-        vector<int> *prev_line = new vector<int>(triangle[0]), *cur_line = nullptr;
-        
-        for (int line_index = 1; line_index < triangle.size(); line_index++) {
-            cur_line = new vector<int>();
-            cur_line->resize(triangle[line_index].size());
-            
-            for (int i = 0; i < cur_line->size(); i++) {
-                cur_line->at(i) = INT_MAX;
+        vector<int> moves_sum(triangle[triangle.size() - 1].size(), INT_MAX);
+        moves_sum[0] = triangle[0][0];
+
+        for (long line_index = 1; line_index < triangle.size(); line_index++) {
+            for (long i = triangle[line_index].size() - 1; i >= 0; i--) {
+                int tmp = INT_MAX;
+                if (moves_sum[i] != INT_MAX)
+                    tmp = min(tmp, triangle[line_index][i] + moves_sum[i]);
                 if (i - 1 >= 0)
-                    cur_line->at(i) = min(prev_line->at(i - 1) + triangle[line_index][i], cur_line->at(i));
-                if (i < prev_line->size())
-                    cur_line->at(i) = min(prev_line->at(i) + triangle[line_index][i], cur_line->at(i));
+                    tmp = min(tmp, triangle[line_index][i] + moves_sum[i - 1]);
+                moves_sum[i] = tmp;
             }
-            
-            delete prev_line;
-            prev_line = cur_line;
         }
         
         int ret = INT_MAX;
-        for (int val : *prev_line)
+        for (int val : moves_sum)
             ret = min(ret, val);
-        delete cur_line;
         
         return ret;
     }
