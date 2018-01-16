@@ -34,3 +34,18 @@ public:
         return (int)(nums.size() - counter);
     }
 };
+
+//===== not mine ========
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int pos = 0;
+        int limit = 2;
+        
+        for (int n : nums) {
+            if (pos <= limit - 1 || n > nums[pos - limit])
+                nums[pos++] = n;
+        }
+        return pos;
+    }
+};
