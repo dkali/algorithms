@@ -31,46 +31,53 @@
 // 91
 
 #include <iostream>
-#include <string>
 #include <sstream>
-#include <vector>
+#include <stack>
 #include <climits>
+#include <tuple>
 
 using namespace std;
 
 int main(int argc, const char * argv[]) {
     int steps;
     string input_str;
-    vector<int> storage;
-
+//    tuple<int, int> - val, current_max
+    stack<tuple<int, int>> storage;
+    
     getline(cin, input_str);
     stringstream(input_str) >> steps;
-
+    int current_max = INT_MIN;
+    
     while (steps-- > 0) {
         getline(cin, input_str);
         istringstream iss(input_str);
-
+        
         string cmd, param;
         iss >> cmd;
-
+        
         switch (stoi(cmd)) {
             case 1: { //push
                 iss >> param;
                 int val = stoi(param);
-                storage.push_back(val);
+                if (val > current_max) current_max = val;
+                tuple<int, int> tup (val, current_max);
+                storage.push(tup);
             }
             break;
-
+                
             case 2: { //pop
-                storage.pop_back();
+                storage.pop();
+                if (storage.size() > 0) {
+                    tuple<int, int> tup = storage.top();
+                    current_max = get<1>(tup);
+                }
+                else
+                    current_max = INT_MIN;
             }
             break;
-
+                
             case 3: { //print max
-                int max = INT_MIN;
-                for (int n : storage)
-                    if (n > max) max = n;
-                printf("%d\n", max);
+                printf("%d\n", current_max);
             }
             break;
         }
@@ -78,3 +85,4 @@ int main(int argc, const char * argv[]) {
     
     return 0;
 }
+
