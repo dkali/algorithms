@@ -11,7 +11,6 @@
 
 // Since the answer may be large, output the answer modulo 10^9 + 7.
 
-
 // Example 1:
 // Input: 1
 // Output: 10
@@ -63,5 +62,47 @@ public:
     int knightDialer(int hops) {
         dp('*', "", hops);
         return (int)my_set.size();
+    }
+};
+
+// ================================
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+private:
+    void dp(int cur_digit, int hops) {
+        if (hops > 0) {
+            if (cur_digit == -1)
+                for (int i = 0; i < 10; i++) {
+                    dp(i, hops - 1);
+                }
+            else {
+                for (int new_digit : dp_baseline[cur_digit])
+                    dp(new_digit, hops - 1);
+            }
+        }
+        else {
+            summ++;
+        }
+    }
+    
+public:
+    vector<vector<int>> dp_baseline;
+    int summ;
+    
+    Solution() {
+        summ = 0;
+        dp_baseline = {{4,6}, {6,8}, {7,9}, {4,8}, {3,9,0}, {}, {1,7,0}, {2,6}, {1,3}, {2,4}};
+    }
+    
+    int knightDialer(int hops) {
+        summ = 0;
+        dp(-1, hops);
+        return summ;
     }
 };
