@@ -26,7 +26,6 @@ public:
         }
         
         while (!mq.empty()) {
-            int nextRowSize = 0;
             sum = 0;
             // calculate the sum for the current row
             while (qsize-- > 0) {
@@ -35,14 +34,12 @@ public:
                 sum += currentNode->val;
                 if (currentNode->left != nullptr) {
                     mq.push(currentNode->left);
-                    nextRowSize++;
                 }
                 if (currentNode->right != nullptr) {
                     mq.push(currentNode->right);
-                    nextRowSize++;
                 }
             }
-            qsize = nextRowSize;
+            qsize = mq.size();
         }
         
         return sum;
