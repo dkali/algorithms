@@ -28,48 +28,46 @@ class Solution {
 public:
     int sumEvenGrandparent(TreeNode* root) {
         int sum = 0;
-        stack<familyMember*> mstack;
+        stack<familyMember> mstack;
         
         if (root == nullptr)
             return 0;
         else {
-            familyMember* froot = new familyMember;
-            froot->currentNode = root;
+            familyMember froot;
+            froot.currentNode = root;
             mstack.push(froot);
         }
             
         while(!mstack.empty()) {
-            familyMember* current = mstack.top();
+            familyMember current = mstack.top();
             mstack.pop();
             
-            if (current->ancestors.size() == 2) {
-                if (current->ancestors.front() % 2 == 0) {
-                    sum += current->currentNode->val;
-                    // cout << "child = " << current->currentNode->val << endl;
+            if (current.ancestors.size() == 2) {
+                if (current.ancestors.front() % 2 == 0) {
+                    sum += current.currentNode->val;
+                    // cout << "child = " << current.currentNode->val << endl;
                 }
-                current->ancestors.pop();
+                current.ancestors.pop();
             }
             
             // insert self as parent for leafs
             queue<int> newAncestors;
-            if (!current->ancestors.empty())
-                newAncestors.push(current->ancestors.front());
-            newAncestors.push(current->currentNode->val);
+            if (!current.ancestors.empty())
+                newAncestors.push(current.ancestors.front());
+            newAncestors.push(current.currentNode->val);
             
-            if (current->currentNode->left != nullptr) {
-                familyMember* fleft = new familyMember();
-                fleft->ancestors = newAncestors;
-                fleft->currentNode = current->currentNode->left;
+            if (current.currentNode->left != nullptr) {
+                familyMember fleft;
+                fleft.ancestors = newAncestors;
+                fleft.currentNode = current.currentNode->left;
                 mstack.push(fleft);
             }
-            if (current->currentNode->right != nullptr) {
-                familyMember* fright = new familyMember();
-                fright->ancestors = newAncestors;
-                fright->currentNode = current->currentNode->right;
+            if (current.currentNode->right != nullptr) {
+                familyMember fright;
+                fright.ancestors = newAncestors;
+                fright.currentNode = current.currentNode->right;
                 mstack.push(fright);
             }
-            
-            delete(current);
         }
         
         return sum;
