@@ -23,7 +23,7 @@ public class Solution
 {
     public bool AreOccurrencesEqual(string str)
     {
-        int[] freq = new int[32];
+        int[] freq = new int[26];
 
         foreach (char c in str)
         {
@@ -33,10 +33,8 @@ public class Solution
         int tmp = freq[str[0] - 'a'];
         foreach (int num in freq)
         {
-            if (num != 0)
-            {
-                if (num != tmp)
-                    return false;
+            if (num != 0 && num != tmp)
+                return false;
             }
         }
 
