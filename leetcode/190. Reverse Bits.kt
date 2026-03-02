@@ -18,6 +18,8 @@
 // 2147483644	01111111111111111111111111111100
 // 1073741822	00111111111111111111111111111110
 
+package task190
+
 class Solution {
     fun reverseBits(n: Int): Int {
         var input = n

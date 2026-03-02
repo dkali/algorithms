@@ -23,6 +23,8 @@
 // -100 <= nums[i] <= 100
 // nums is sorted in non-decreasing order.
 
+package task26
+
 class Solution {
     fun removeDuplicates(nums: IntArray): Int {
         var count = 1

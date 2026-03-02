@@ -18,6 +18,8 @@
 // Constraints:
 // -231 <= x <= 231 - 1
 
+package task9
+
 class Solution {
     fun isPalindrome(x: Int): Boolean {
         if (x < 0) return false
